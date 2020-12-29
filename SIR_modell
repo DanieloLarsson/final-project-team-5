@@ -50,6 +50,7 @@ def plotsir(t, S, E, I, R):
 plotsir(t, S, E, I, R)
 
 """
+Comments regarding our code and thoughts about possible implementations.
 
 We chose to make some changes to an already known model, the following changes were made:
 →  stricter restrictions as the number of infected increases and therefore we added P
