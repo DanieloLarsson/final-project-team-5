@@ -3,27 +3,29 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # describe the model
-def deriv(y, t, N, beta, delta, k):
-    S, E, I, R = y
-    dSdt = -beta * S * I / N
-    dEdt = beta * S * I / N - k * E
+def deriv(y, t, N, beta, delta, k, d):
+    S, E, I, R, D = y
+    P = 1 - (I**(1/2) / N**(1/2)) # Changes in policy which depends on I and N
+    dSdt = -P * beta * S * I / N  # More infected -> Decreased P -> Decreased beta
+    dEdt = P * beta * S * I / N - delta * E
     dIdt = delta * E - k * I
-    dRdt = k * I
-    return dSdt, dEdt, dIdt, dRdt
+    dRdt = (1 - d) * k * I
+    dDdt = d * k * I # Deceased per day
+    return dSdt, dEdt, dIdt, dRdt, dDdt
 
 # describe the parameters
-N =  2298               # population
-beta = 2.5            
-k=1/7
-delta = 1.0 / 5.0 # Incubation period of five days
-S0, E0, I0, R0 = N-1, 1, 0, 0  # initial conditions: one infected, rest susceptible
-
-t = np.linspace(0, 999, 1000) # Grid of time points (in days)
-y0 = S0, E0, I0, R0 # Initial conditions vector
+N =  10000000             # population
+beta = 2                  # basic reproduction number
+d = 0.03                  # mortality rate           
+k=1/7                     # Infectious period
+delta = 1.0 / 5.0  # Incubation period of five days
+S0, E0, I0, R0, D0 = N-1, 1, 0, 0, 0  # initial conditions: one infected, rest susceptible
+t = np.linspace(0, 99, 100)  # Grid of time points (in days)
+y0 = S0, E0, I0, R0, D0  # Initial conditions vector
 
 # Integrate the SIR equations over the time grid, t.
-ret = odeint(deriv, y0, t, args=(N, beta, k, delta))
-S, E, I, R = ret.T
+ret = odeint(deriv, y0, t, args=(N, beta, k, delta, d))
+S, E, I, R, D = ret.T
 
 def plotsir(t, S, E, I, R):
   f, ax = plt.subplots(1,1,figsize=(10,4))
@@ -31,6 +33,7 @@ def plotsir(t, S, E, I, R):
   ax.plot(t, E, 'y', alpha=0.7, linewidth=2, label='Exposed')  
   ax.plot(t, I, 'r', alpha=0.7, linewidth=2, label='Infected')
   ax.plot(t, R, 'g', alpha=0.7, linewidth=2, label='Recovered')
+  ax.plot(t, D, 'm', alpha=0.7, linewidth=2, label='Deceased')
 
   ax.set_xlabel('Time (days)')
 
@@ -45,3 +48,23 @@ def plotsir(t, S, E, I, R):
   plt.show();
 
 plotsir(t, S, E, I, R)
+
+"""
+Concept map of how corona virus spread and possible interventions
+
+Changes we have made:
+→ restriktioner som blir kraftigare ju fler som är smittade
+Men en svaghet i modellen är att vi inte modellerat för beteendeförändringar allt eftersom tiden löper
+
+Ta höjd för andra våg
+→ beta ökar med tiden pga folk trötta på lockdown, normalisering av situationen, 
+
+Lägg till graf för döda
+→ från infected till antingen recovered eller död
+→ dDdt ökar när antal infekterade ökar 0,01* I /21
+Borde dödligheten avta allt eftersom riskgrupperna blir utsatta? Eller räknar man med att man lyckas skydda dem, eller att den risken är inbakad i 1% moratalitet?
+
+iv 0.1*I/7, D = (0.01+(krav/kapacitet)^2)/100)*k*I
+
+Flytta tillbaka från recovered till susceptible (- dDdt)
+→ Borde leda till att man uppnår en jämvikt, det behövs något mer, vaccin + starkare restriktioner (= mindre P), för att driva ner antal smittade till noll (annars kan covid-19 komma att bli som en förkylning, där det alltid är några i populationen som bär på viruset).
