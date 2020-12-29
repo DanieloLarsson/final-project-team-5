@@ -51,7 +51,7 @@ plotsir(t, S, E, I, R)
 
 """
 
-Changes we have made:
+We chose to make some changes to a already known model, the following changes were made:
 →  stricter restrictions as the number of infected increases and therefore we added P
 However, we have not accounted for people’s willingness to abide by said restrictions changing. 
 → We also added a graph for mortality, since we thought that could be of interest for anyone analysing the effects of covid19 
