@@ -66,5 +66,10 @@ Borde dödligheten avta allt eftersom riskgrupperna blir utsatta? Eller räknar 
 
 iv 0.1*I/7, D = (0.01+(krav/kapacitet)^2)/100)*k*I
 
-Flytta tillbaka från recovered till susceptible (- dDdt)
-→ Borde leda till att man uppnår en jämvikt, det behövs något mer, vaccin + starkare restriktioner (= mindre P), för att driva ner antal smittade till noll (annars kan covid-19 komma att bli som en förkylning, där det alltid är några i populationen som bär på viruset).
+Taking non-lasting immunity into account
+Subtracting an amount from recovered and adding that same amount to susceptible should simulate non-lasting immunity. 
+A suggestion for this amount is R * 1 / days of immunity (say 180). This leads to some sort of equilibrium which suggests 
+that large scale vaccination and/or restrictions are needed to eliminate the infection. In our implementation, 
+restrictions are simulated with the letter P. 
+
+"""
