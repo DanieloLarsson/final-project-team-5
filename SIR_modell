@@ -50,20 +50,16 @@ def plotsir(t, S, E, I, R):
 plotsir(t, S, E, I, R)
 
 """
-Comments regarding our code and thoughts about possible implementations.
 
 We chose to make some changes to an already known model, the following changes were made:
 →  stricter restrictions as the number of infected increases and therefore we added P
 However, we have not accounted for people’s willingness to abide by said restrictions changing. 
-→ We also added a graph for mortality, since we thought that could be of interest for anyone analysing the effects of covid19 
+→ We also added a graph for mortality, since we thought that could be of interest for anyone analysing the effects of covid19
+The once who are infected will either die or recover
 
+Other comments and possible changes:
 Count with a second peak
 → beta increases over time since people stop following the restrictions 
-
-Lägg till graf för döda
-→ från infected till antingen recovered eller död
-→ dDdt ökar när antal infekterade ökar 0,01* I /21
-Borde dödligheten avta allt eftersom riskgrupperna blir utsatta? Eller räknar man med att man lyckas skydda dem, eller att den risken är inbakad i 1% moratalitet?
 
 Adding a variable that tracks how the demand for intensive care beds develop.
 ic 0.05*I/7
