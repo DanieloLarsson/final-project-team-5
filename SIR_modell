@@ -64,7 +64,12 @@ Lägg till graf för döda
 → dDdt ökar när antal infekterade ökar 0,01* I /21
 Borde dödligheten avta allt eftersom riskgrupperna blir utsatta? Eller räknar man med att man lyckas skydda dem, eller att den risken är inbakad i 1% moratalitet?
 
-iv 0.1*I/7, D = (0.01+(krav/kapacitet)^2)/100)*k*I
+Adding a variable that tracks how the demand for intensive care beds develop.
+ic 0.05*I/7
+
+Making the mortality rate dependant on how overwhelmed the intensive care units are, where a quadrativ variable makes a small demand insignifiant, but a large demand 
+quite influential.
+D = (0.01+((demand/capacity)^2)/100)*k*I
 
 Taking non-lasting immunity into account
 Subtracting an amount from recovered and adding that same amount to susceptible should simulate non-lasting immunity. 
