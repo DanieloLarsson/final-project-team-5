@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 # describe the model
 def deriv(y, t, N, beta, delta, k):
     S, E, I, R = y
-    dSdt = -beta * S * I / N + R
+    dSdt = -beta * S * I / N
     dEdt = beta * S * I / N - k * E
     dIdt = delta * E - k * I
     dRdt = k * I
