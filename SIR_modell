@@ -64,6 +64,8 @@ Lägg till graf för döda
 → från infected till antingen recovered eller död
 → dDdt ökar när antal infekterade ökar 0,01* I /21
 Borde dödligheten avta allt eftersom riskgrupperna blir utsatta? Eller räknar man med att man lyckas skydda dem, eller att den risken är inbakad i 1% moratalitet?
+Denna är väl besvarad med nedanstående?
+
 
 Adding a variable that tracks how the demand for intensive care beds develop.
 ic 0.05*I/7
