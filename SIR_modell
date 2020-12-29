@@ -50,11 +50,11 @@ def plotsir(t, S, E, I, R):
 plotsir(t, S, E, I, R)
 
 """
-Concept map of how corona virus spread and possible interventions
 
 Changes we have made:
-→ restriktioner som blir kraftigare ju fler som är smittade
-Men en svaghet i modellen är att vi inte modellerat för beteendeförändringar allt eftersom tiden löper
+→  stricter restrictions as the number of infected increases and therefore we added P
+However, we have not accounted for people’s willingness to abide by said restrictions changing. 
+→ We also added a graph for mortality, since we thought that could be of interest for anyone analysing the effects of covid19 
 
 Count with a second peak
 → beta increases over time since people stop following the restrictions 
