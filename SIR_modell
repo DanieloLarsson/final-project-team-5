@@ -56,8 +56,8 @@ Changes we have made:
 → restriktioner som blir kraftigare ju fler som är smittade
 Men en svaghet i modellen är att vi inte modellerat för beteendeförändringar allt eftersom tiden löper
 
-Ta höjd för andra våg
-→ beta ökar med tiden pga folk trötta på lockdown, normalisering av situationen, 
+Count with a second peak
+→ beta increases over time since people stop following the restrictions 
 
 Lägg till graf för döda
 → från infected till antingen recovered eller död
