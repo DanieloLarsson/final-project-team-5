@@ -1,0 +1,77 @@
+from scipy.integrate import odeint
+import numpy as np
+import matplotlib.pyplot as plt
+
+# describe the model
+def deriv(y, t, N, beta, delta, k, d):
+    S, E, I, R, D = y
+    P = 1 - (I**(1/2) / N**(1/2)) # Changes in policy which depends on I and N
+    dSdt = -P * beta * S * I / N  # More infected -> Decreased P -> Decreased beta
+    dEdt = P * beta * S * I / N - delta * E
+    dIdt = delta * E - k * I
+    dRdt = (1 - d) * k * I
+    dDdt = d * k * I # Deceased per day
+    return dSdt, dEdt, dIdt, dRdt, dDdt
+
+# describe the parameters
+N =  10000000             # population
+beta = 2                  # basic reproduction number
+d = 0.03                  # mortality rate           
+k=1/7                     # Infectious period
+delta = 1.0 / 5.0  # Incubation period of five days
+S0, E0, I0, R0, D0 = N-1, 1, 0, 0, 0  # initial conditions: one infected, rest susceptible
+t = np.linspace(0, 99, 100)  # Grid of time points (in days)
+y0 = S0, E0, I0, R0, D0  # Initial conditions vector
+
+# Integrate the SIR equations over the time grid, t.
+ret = odeint(deriv, y0, t, args=(N, beta, k, delta, d))
+S, E, I, R, D = ret.T
+
+def plotsir(t, S, E, I, R):
+  f, ax = plt.subplots(1,1,figsize=(10,4))
+  ax.plot(t, S, 'b', alpha=0.7, linewidth=2, label='Susceptible')
+  ax.plot(t, E, 'y', alpha=0.7, linewidth=2, label='Exposed')  
+  ax.plot(t, I, 'r', alpha=0.7, linewidth=2, label='Infected')
+  ax.plot(t, R, 'g', alpha=0.7, linewidth=2, label='Recovered')
+  ax.plot(t, D, 'm', alpha=0.7, linewidth=2, label='Deceased')
+
+  ax.set_xlabel('Time (days)')
+
+  ax.yaxis.set_tick_params(length=0)
+  ax.xaxis.set_tick_params(length=0)
+  ax.grid(b=True, which='major', c='w', lw=2, ls='-')
+  legend = ax.legend()
+  legend.get_frame().set_alpha(0.5)
+  for spine in ('top', 'right', 'bottom', 'left'):
+      ax.spines[spine].set_visible(False)
+  plt.savefig("SIR_model_plot.png")
+  plt.show();
+
+plotsir(t, S, E, I, R)
+
+"""
+
+We chose to make some changes to an already known model, the following changes were made:
+→  stricter restrictions as the number of infected increases and therefore we added P
+However, we have not accounted for people’s willingness to abide by said restrictions changing. 
+→ We also added a graph for mortality, since we thought that could be of interest for anyone analysing the effects of covid19
+The once who are infected will either die or recover
+
+Other comments and possible changes:
+Count with a second peak
+→ beta increases over time since people stop following the restrictions 
+
+Adding a variable that tracks how the demand for intensive care beds develop.
+ic 0.05*I/7
+
+Making the mortality rate dependant on how overwhelmed the intensive care units are, where a quadrativ variable makes a small demand insignifiant, but a large demand 
+quite influential.
+D = (0.01+((demand/capacity)^2)/100)*k*I
+
+Taking non-lasting immunity into account
+Subtracting an amount from recovered and adding that same amount to susceptible should simulate non-lasting immunity. 
+A suggestion for this amount is R * 1 / days of immunity (say 180). This leads to some sort of equilibrium which suggests 
+that large scale vaccination and/or restrictions are needed to eliminate the infection. In our implementation, 
+restrictions are simulated with the letter P. 
+
+"""
